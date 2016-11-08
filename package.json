@@ -1,0 +1,15 @@
+{
+  "name": "rss-torrent-reader",
+  "version": "0.0.1",
+  "description": "This shall read RSS-feeds and download the torrentfile, also have a smartness filter",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Snorrre Lothar von Gohren Edwin <snorre.edwin@gmail.com> (https://github.com/Snorlock)",
+  "license": "ISC",
+  "dependencies": {
+    "feedparser": "^1.1.5",
+    "request": "^2.78.0"
+  }
+}
