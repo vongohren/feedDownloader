@@ -9,7 +9,11 @@
   "author": "Snorrre Lothar von Gohren Edwin <snorre.edwin@gmail.com> (https://github.com/Snorlock)",
   "license": "ISC",
   "dependencies": {
+    "cheerio": "^0.22.0",
     "feedparser": "^1.1.5",
-    "request": "^2.78.0"
+    "pushbullet": "^1.4.3",
+    "request": "^2.78.0",
+    "torrent-name-parser": "^0.6.5",
+    "trakt.tv": "^2.1.0"
   }
 }

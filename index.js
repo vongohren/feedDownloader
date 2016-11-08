@@ -1,7 +1,23 @@
-var request = require('request')
-  , FeedParser = require('feedparser')
+const request = require('request')
+const FeedParser = require('feedparser')
+const tnp = require('torrent-name-parser')
+const feedUrl = process.env.FEED_URL
 
-var feedUrl = process.env.FEED_URL
+request({
+  method:'get',
+  uri:'https://api.trakt.tv/users/vongohren/history/shows/south-park',
+  headers: {
+    'Content-Type':'application/json',
+    'trakt-api-version': '2',
+    'trakt-api-key': process.env.TRAKT_CLIENT_ID
+  }
+}, function (error, response, body) {
+  if (!error && response.statusCode == 200) {
+    console.log(body) // Show the HTML for the Google homepage.
+  } else {
+    console.log(error);
+  }
+})
 
 function fetch(feed) {
   // Define our streams
@@ -12,8 +28,9 @@ function fetch(feed) {
   req.setHeader('accept', 'text/html,application/xhtml+xml');
 
   var feedparser = new FeedParser();
-  var done = (err) => {
-    console.log(err);
+  var done = (err, obj) => {
+    if(err) console.log(err);
+    if(obj) console.log(obj);
   }
 
   // Define our handlers
@@ -29,8 +46,10 @@ function fetch(feed) {
   feedparser.on('readable', function() {
     var post;
     while (post = this.read()) {
-      console.log(JSON.stringify(post, ' ', 4));
+      // console.log(post.title)
+      // console.log(tnp(post.title))
     }
+
   });
 }
 
