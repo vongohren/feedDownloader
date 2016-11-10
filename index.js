@@ -1,26 +1,12 @@
 const request = require('request')
 const FeedParser = require('feedparser')
-const tnp = require('torrent-name-parser')
-const feedUrl = process.env.FEED_URL
 
-request({
-  method:'get',
-  uri:'https://api.trakt.tv/users/vongohren/history/shows/south-park',
-  headers: {
-    'Content-Type':'application/json',
-    'trakt-api-version': '2',
-    'trakt-api-key': process.env.TRAKT_CLIENT_ID
-  }
-}, function (error, response, body) {
-  if (!error && response.statusCode == 200) {
-    console.log(body) // Show the HTML for the Google homepage.
-  } else {
-    console.log(error);
-  }
-})
+const feedUrl = process.env.FEED_URL
+const desicionMaker = require('./lib/desicion-maker.js');
 
 function fetch(feed) {
   // Define our streams
+  var posts = [];
   var req = request(feed, {timeout: 10000, pool: false});
   req.setMaxListeners(50);
   // Some feeds do not respond without user-agent and accept headers.
@@ -42,15 +28,19 @@ function fetch(feed) {
   });
 
   feedparser.on('error', done);
-  feedparser.on('end', done);
+  feedparser.on('end', async function() {
+    for(let post of posts) {
+      let download = await desicionMaker.decide(post)
+      if(download) console.log(post.title)
+    }
+  });
   feedparser.on('readable', function() {
     var post;
     while (post = this.read()) {
-      // console.log(post.title)
-      // console.log(tnp(post.title))
+      posts.push(post);
     }
-
   });
 }
 
-setInterval(fetch.bind(this, feedUrl), 5000);
+// setInterval(fetch.bind(this, feedUrl), 10000);
+fetch(feedUrl);
