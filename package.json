@@ -9,6 +9,7 @@
   "author": "Snorrre Lothar von Gohren Edwin <snorre.edwin@gmail.com> (https://github.com/Snorlock)",
   "license": "ISC",
   "dependencies": {
+    "bunyan": "^1.8.4",
     "feedparser": "^1.1.5",
     "moment": "^2.15.2",
     "request": "^2.78.0",
