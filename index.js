@@ -31,6 +31,7 @@ function fetch(feed) {
 
   feedparser.on('error', done);
   feedparser.on('end', async function() {
+    let downloaded = 0;
     for(let post of posts) {
       let download = await desicionMaker.decide(post)
       if(download) {
@@ -38,8 +39,10 @@ function fetch(feed) {
         requestet.setHeader('user-agent', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/31.0.1650.63 Safari/537.36')
         requestet.setHeader('accept', 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8');
         requestet.pipe(fs.createWriteStream(`${post.title}.torrent`))
+        downloaded += 1
       }
     }
+    console.log(`DONE, downloaded ${downloaded} files`)
   });
   feedparser.on('readable', function() {
     var post;
