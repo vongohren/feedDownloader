@@ -8,7 +8,7 @@ const log = bunyan.createLogger({
   streams: [
       {
         level: 'info',
-        path: './log/applogging.log'
+        path: __dirname+'/log/applogging.log'
       }
     ]
   });
