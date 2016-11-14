@@ -44,7 +44,8 @@ function fetch(feed) {
         const requestet = request(post.link)
         requestet.setHeader('user-agent', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/31.0.1650.63 Safari/537.36')
         requestet.setHeader('accept', 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8');
-        requestet.pipe(fs.createWriteStream(`${post.title}.torrent`))
+        const filePath = process.env.RSS_FILE_PATH || './'
+        requestet.pipe(fs.createWriteStream(`${filePath}${post.title}.torrent`))
         downloaded += 1
       }
     }
