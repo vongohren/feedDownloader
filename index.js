@@ -2,18 +2,8 @@ const request = require('request')
 const FeedParser = require('feedparser')
 const fs = require('fs')
 const desicionMaker = require('./lib/desicion-maker.js');
-const bunyan = require('bunyan');
-const log = bunyan.createLogger({
-  name: "rssFeedHandler",
-  streams: [
-      {
-        level: 'info',
-        path: __dirname+'/log/applogging.log'
-      }
-    ]
-  });
+const logger = require('./lib/logger');
 const feedUrl = process.env.FEED_URL
-
 
 function fetch(feed) {
   // Define our streams
@@ -41,8 +31,15 @@ function fetch(feed) {
   feedparser.on('error', done);
   feedparser.on('end', async function() {
     let downloaded = 0;
+
+
     for(let post of posts) {
-      let download = await desicionMaker.decide(post)
+      let download = false;
+      try {
+        download = await desicionMaker.decide(post)
+      } catch (e) {
+        logger.log("info",e)
+      }
       if(download) {
         const requestet = request(post.link)
         requestet.setHeader('user-agent', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/31.0.1650.63 Safari/537.36')
@@ -51,7 +48,7 @@ function fetch(feed) {
         downloaded += 1
       }
     }
-    log.info(`DONE, downloaded ${downloaded} files`)
+    logger.log("info", `DONE, downloaded ${downloaded} files`)
   });
   feedparser.on('readable', function() {
     var post;
