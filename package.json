@@ -4,7 +4,8 @@
   "description": "This shall read RSS-feeds and download the torrentfile, also have a smartness filter",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node --harmony index.js"
   },
   "author": "Snorrre Lothar von Gohren Edwin <snorre.edwin@gmail.com> (https://github.com/Snorlock)",
   "license": "ISC",
