@@ -4,6 +4,7 @@ const fs = require('fs')
 const desicionMaker = require('./lib/desicion-maker.js');
 const logger = require('./lib/logger');
 const feedUrl = process.env.FEED_URL
+const firebase = require('./lib/firebase');
 
 function fetch(feed) {
   // Define our streams
@@ -59,5 +60,6 @@ function fetch(feed) {
   });
 }
 
-// setInterval(fetch.bind(this, feedUrl), 10000);
-fetch(feedUrl);
+firebase.getUrl(feedUrl => {
+  fetch(feedUrl);
+});

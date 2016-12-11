@@ -3,3 +3,4 @@ example-data.json
 examplecode.js
 log/
 npm-debug.log
+serviceAccountKey.json
