@@ -3,7 +3,6 @@ const FeedParser = require('feedparser')
 const fs = require('fs')
 const desicionMaker = require('./lib/desicion-maker.js');
 const logger = require('./lib/logger');
-const feedUrl = process.env.FEED_URL
 const firebase = require('./lib/firebase');
 
 function fetch(feed) {
