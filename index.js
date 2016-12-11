@@ -49,6 +49,7 @@ function fetch(feed) {
         downloaded += 1
       }
     }
+    firebase.admin.database().goOffline();
     logger.log("info", `DONE, downloaded ${downloaded} files`)
   });
   feedparser.on('readable', function() {
