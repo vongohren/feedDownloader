@@ -62,6 +62,7 @@ function fetch(feed) {
             logger.log("info", `${file.title}, published: ${file.date}`)
         })
     }
+    logger.log('info','Script finished running')
     logger.close()
   });
   feedparser.on('readable', function() {
