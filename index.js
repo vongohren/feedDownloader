@@ -50,9 +50,11 @@ function fetch(feed) {
       } catch (e) {
           if(e.code) {
               if(e.code===404) {
-                    logger.log('error', `Failing for ${post.title} with http code: ${e.code} and message: ${e.info}. Most likely is it that the parser doesnt parse the title correctly and cant find the show on trakt`)
+                  logger.log('error', `Failing for ${post.title}. Http code: ${e.code}. Message: ${e.info}. Most likely an error on the parser and cant find the show on trakt`)
+              } else {
+                  logger.log('error', `Failing for ${post.title}. Http code: ${e.code}. Message: ${e.info}.`)
               }
-              logger.log('error', `Failing for ${post.title} with http code: ${e.code} and message: ${e.info}`)
+
           } else{
               logger.log('error', e);
           }
