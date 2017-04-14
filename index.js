@@ -30,27 +30,39 @@ function fetch(feed) {
 
   feedparser.on('error', done);
   feedparser.on('end', async function() {
-    let downloaded = 0;
-
-
+    let downloaded = {
+        total:0,
+        files: []
+    };
     for(let post of posts) {
       let download = false;
       try {
         download = await desicionMaker.decide(post)
+        if(download) {
+          const requestet = request(post.link)
+          requestet.setHeader('user-agent', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/31.0.1650.63 Safari/537.36')
+          requestet.setHeader('accept', 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8');
+          const filePath = process.env.RSS_FILE_PATH || './'
+          requestet.pipe(fs.createWriteStream(`${filePath}${post.title}.torrent`))
+          downloaded.total += 1
+          downloaded.files.push(post)
+        }
       } catch (e) {
-        logger.log("info",e)
-      }
-      if(download) {
-        const requestet = request(post.link)
-        requestet.setHeader('user-agent', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/31.0.1650.63 Safari/537.36')
-        requestet.setHeader('accept', 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8');
-        const filePath = process.env.RSS_FILE_PATH || './'
-        requestet.pipe(fs.createWriteStream(`${filePath}${post.title}.torrent`))
-        downloaded += 1
+          if(e.code) {
+              logger.log('error', `Failing with http code: ${e.code} and message: ${e.info}`)
+          } else{
+              logger.log('error', e);
+          }
       }
     }
     firebase.admin.database().goOffline();
-    logger.log("info", `DONE, downloaded ${downloaded} files`)
+    if(downloaded.total) {
+        logger.log("info", `Downloaded ${downloaded.total} files`)
+        downloaded.files.map(file => {
+            logger.log("info", `${file.title}, published: ${file.date}`)
+        })
+    }
+    logger.close()
   });
   feedparser.on('readable', function() {
     var post;
