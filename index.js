@@ -78,6 +78,6 @@ function fetch(feed) {
   });
 }
 
-firebase.getUrl(feedUrl => {
+firebase.getStaticUrl(feedUrl => {
   fetch(feedUrl);
 });

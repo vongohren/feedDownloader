@@ -5,15 +5,18 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node --harmony index.js"
+    "start": "node --harmony index.js",
+    "dev": "node --harmony index.js"
   },
   "author": "Snorrre Lothar von Gohren Edwin <snorre.edwin@gmail.com> (https://github.com/Snorlock)",
   "license": "ISC",
   "dependencies": {
     "feedparser": "^1.1.5",
     "firebase-admin": "^4.0.4",
+    "memory-cache": "^0.2.0",
     "moment": "^2.15.2",
     "request": "^2.78.0",
+    "string_score": "^0.1.22",
     "torrent-name-parser": "^0.6.5",
     "winston": "^2.3.1",
     "winston-papertrail": "^1.0.4"
