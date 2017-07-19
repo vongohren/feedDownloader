@@ -16,7 +16,7 @@ function fetch(feed) {
 
   var feedparser = new FeedParser();
   var done = (err, obj) => {
-    if(err) console.log(err);
+    if(err) logger.log('error', `Failing to fetch the feed itself. Message: ${err}.`)
     if(obj) console.log(obj);
   }
 
