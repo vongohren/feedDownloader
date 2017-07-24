@@ -76,6 +76,7 @@ function fetch(feed) {
     }
     logger.log('info','Script finished running')
     logger.close()
+    process.exit(0)
   });
   feedparser.on('readable', function() {
     var post;
