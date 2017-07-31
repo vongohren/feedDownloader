@@ -4,6 +4,7 @@ const fs = require('fs')
 const desicionMaker = require('./lib/desicion-maker.js');
 const logger = require('./lib/logger');
 const firebase = require('./lib/firebase');
+const logHelpers = require('./utils/logHelpers')
 
 function fetch(feed) {
   // Define our streams
@@ -33,26 +34,22 @@ function fetch(feed) {
 
   feedparser.on('error', done);
   feedparser.on('end', async function() {
-    let downloaded = {
-        total:0,
-        files: []
-    };
     for(let post of posts) {
       let download = false;
       try {
         download = await desicionMaker.decide(post)
         if(download) {
           const requestet = request(post.link)
-          requestet.setHeader('user-agent', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/31.0.1650.63 Safari/537.36')
+          requestet.setHeader('user-agent', 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36')
           requestet.setHeader('accept', 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8');
           const filePath = process.env.RSS_FILE_PATH || './'
           const slashRegex = /\//gi;
           const spaceRegex = /\s/gi
           let title = post.title.replace(slashRegex,"-")
           title = title.replace(spaceRegex,"")
-          requestet.pipe(fs.createWriteStream(`${filePath}${title}.torrent`))
-          downloaded.total += 1
-          downloaded.files.push(post)
+          const writeStream = fs.createWriteStream(`${filePath}${title}.torrent`)
+          writeStream.on('finish', logHelpers.logFileDownloaded.bind(this, post))
+          requestet.pipe(writeStream)
         }
       } catch (e) {
           if(e.code) {
@@ -68,15 +65,8 @@ function fetch(feed) {
       }
     }
     firebase.admin.database().goOffline();
-    if(downloaded.total) {
-        logger.log("info", `Downloaded ${downloaded.total} files`)
-        downloaded.files.map(file => {
-            logger.log("info", `${file.title}, published: ${file.date}`)
-        })
-    }
     logger.log('info','Script finished running')
     logger.close()
-    process.exit(0)
   });
   feedparser.on('readable', function() {
     var post;
