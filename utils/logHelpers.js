@@ -2,7 +2,7 @@ const logger = require('../lib/logger');
 
 
 const logFileDownloaded = (post) => {
-    logger.log("info", `${post.title}, published: ${post.date}`)
+    logger.log("info", `Downloaded: ${post.title}, published: ${post.date}`)
 }
 
 
