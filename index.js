@@ -39,17 +39,7 @@ function fetch(feed) {
       try {
         download = await desicionMaker.decide(post)
         if(download) {
-          const requestet = request(post.link)
-          requestet.setHeader('user-agent', 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36')
-          requestet.setHeader('accept', 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8');
-          const filePath = process.env.RSS_FILE_PATH || './'
-          const slashRegex = /\//gi;
-          const spaceRegex = /\s/gi
-          let title = post.title.replace(slashRegex,"-")
-          title = title.replace(spaceRegex,"")
-          const writeStream = fs.createWriteStream(`${filePath}${title}.torrent`)
-          writeStream.on('finish', logHelpers.logFileDownloaded.bind(this, post))
-          requestet.pipe(writeStream)
+          await storeFileAsync(post);
         }
       } catch (e) {
           if(e.code) {
@@ -58,7 +48,6 @@ function fetch(feed) {
               } else {
                   logger.log('error', `Failing for ${post.title}. Http code: ${e.code}. Message: ${e.info}.`)
               }
-
           } else{
               logger.log('error', e);
           }
@@ -74,6 +63,29 @@ function fetch(feed) {
       posts.push(post);
     }
   });
+}
+
+const storeFileAsync = (post) => {
+    return new Promise((resolve, reject)=> {
+        try{
+          const requestet = request(post.link)
+          requestet.setHeader('user-agent', 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36')
+          requestet.setHeader('accept', 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8');
+          const filePath = process.env.RSS_FILE_PATH || './'
+          const slashRegex = /\//gi;
+          const spaceRegex = /\s/gi
+          let title = post.title.replace(slashRegex,"-")
+          title = title.replace(spaceRegex,"")
+          const writeStream = fs.createWriteStream(`${filePath}${title}.torrent`)
+          writeStream.on('finish', () => {
+            logHelpers.logFileDownloaded(post)
+            resolve(true)
+          })
+          requestet.pipe(writeStream)
+        } catch (err)  {
+          reject(err)
+        }
+    })
 }
 
 firebase.getStaticUrl(feedUrl => {
