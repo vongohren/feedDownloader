@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node --harmony index.js",
+    "start": "NODE_ENV=production node --harmony index.js",
     "dev": "node --harmony index.js",
     "dev:prod": "NODE_ENV=production node --harmony index.js"
   },
