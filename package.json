@@ -7,7 +7,8 @@
     "test": "jest",
     "start": "NODE_ENV=production node --harmony index.js",
     "dev": "node --harmony index.js",
-    "dev:prod": "NODE_ENV=production node --harmony index.js"
+    "dev:prod": "NODE_ENV=production node --harmony index.js",
+    "setup": "configurator setup -r vongohren/personal-apps-config -f feedDownloader"
   },
   "author": "Snorrre Lothar von Gohren Edwin <snorre.edwin@gmail.com> (https://github.com/Snorlock)",
   "license": "ISC",
