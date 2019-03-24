@@ -20,6 +20,7 @@ const downloadDecideAndStore = async (posts) => {
       if(download) {
         const file = await fetchFile(post);
         const success = await storeFile(file, post);
+        logHelpers.logFileDownloaded(post, success);
       }
     } catch (e) {
       decideAndDownloadError(e)
