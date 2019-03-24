@@ -4,7 +4,7 @@
   "description": "This shall read RSS-feeds and download the torrentfile, also have a smartness filter",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
     "start": "NODE_ENV=production node --harmony index.js",
     "dev": "node --harmony index.js",
     "dev:prod": "NODE_ENV=production node --harmony index.js"
@@ -17,9 +17,13 @@
     "memory-cache": "^0.2.0",
     "moment": "^2.15.2",
     "request": "^2.78.0",
+    "request-promise-native": "^1.0.7",
     "string_score": "^0.1.22",
     "torrent-name-parser": "^0.6.5",
     "winston": "^2.3.1",
     "winston-papertrail": "^1.0.4"
+  },
+  "devDependencies": {
+    "jest": "^24.5.0"
   }
 }
