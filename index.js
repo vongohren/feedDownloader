@@ -13,10 +13,12 @@ const endScript = () => {
 }
 
 const downloadDecideAndStore = async (posts) => {
+  const shows = await firebase.getShowTitles();
   for(let post of posts) {
     let download = false;
     try {
-      download = await desicionMaker.decide(post)
+      
+      download = await desicionMaker.decide(post, shows);
       if(download) {
         const file = await fetchFile(post);
         const success = await storeFile(file, post);
