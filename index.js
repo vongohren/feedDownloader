@@ -25,7 +25,7 @@ const downloadDecideAndStore = async (posts) => {
         logHelpers.logFileDownloaded(post, success);
       }
     } catch (e) {
-      decideAndDownloadError(e)
+      decideAndDownloadError(e, post)
     }
   }
 }
