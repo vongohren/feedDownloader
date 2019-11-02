@@ -16,7 +16,7 @@
     "feedparser": "^1.1.5",
     "firebase-admin": "^4.0.4",
     "memory-cache": "^0.2.0",
-    "moment": "^2.15.2",
+    "moment": "^2.19.3",
     "request": "^2.78.0",
     "request-promise-native": "^1.0.7",
     "string_score": "^0.1.22",
